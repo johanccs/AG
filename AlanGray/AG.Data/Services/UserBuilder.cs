@@ -47,33 +47,63 @@ namespace AG.Data.Services
         {
             var users = new List<User>();
 
-            lines.ToList().ForEach(x =>
+            foreach(var line in lines)
             {
-                var user = BuildUser(x);
+                var retUsers = BuildUsersFromLine(line, FOLLOWS);
 
-                if (user != null)
+                if (retUsers != null)
                 {
-                    users.Add(user);
+                    users.AddRange(retUsers);
                 }
-            });
+            }
+
+            var distinctList = users.GroupBy(x => x.Name)
+                .Select(x => x.First())
+                .OrderBy(x=>x.Name)
+                .ToList();
+
+            return distinctList;
+        }
+
+        private IList<User>BuildUsersFromLine(string userLine, string criteria)
+        {
+            if (!StringHelper.Contains(userLine, criteria))
+                throw new ArgumentException("Invalid user");
+
+            var users = new List<User>();
+            var results = userLine.Split(criteria);
+
+            if(results.Length > 0)
+            {
+                foreach(var result in results)
+                {
+                    if(result.Contains(","))
+                    {
+                        var userResults = BuildUsersFromLine(result, ",");
+                        users.AddRange(userResults);
+                    }
+                    else
+                        users.Add(new User(result.Trim()));
+                }
+            }
 
             return users;
         }
 
-        private User BuildUser(string user)
-        {
-            if (!StringHelper.Contains(user, FOLLOWS))
-                throw new ArgumentException("Invalid user");
+        //private IList<User>BuildUsersFromMultiList(string line, string separator)
+        //{
+        //    if (line.Contains(separator))
+        //    {
+        //        var results = line.Split(",");
+        //        var users = new List<User>();
 
-            var results = user.Split(FOLLOWS);
-
-            if(results.Length > 1)
-            {
-                return new User(results[0], results[1]);
-            }
-
-            return null;
-        }
+        //        foreach(var result in results)
+        //        {
+        //            var user
+        //        }
+               
+        //    }
+        //}
 
         private IList<string>ReadLines(string filePath)
         {

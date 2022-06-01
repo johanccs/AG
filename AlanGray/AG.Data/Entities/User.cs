@@ -4,12 +4,9 @@
     {
         public string  Name { get; private set; }
 
-        public string Follower { get; private set; }
-
-        public User(string name, string follower)
+        public User(string name)
         {
             Name = name;
-            Follower = follower;
         }
     }
 }

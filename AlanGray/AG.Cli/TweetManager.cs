@@ -2,7 +2,6 @@
 using AG.Common.Helpers;
 using AG.Data.Contracts;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -40,8 +39,6 @@ namespace AG.Data.Services
         {
             try
             {
-                DisplayGeneralOutput.PrintWelcomeMessage();
-
                 //2. Build List of internal users and followers
                 var internalUserFile = FileHelper.BuildFilePath(_filePath, ApplicationEnum.USERFILE);
                 var users = _userBuilder.Build(internalUserFile);
@@ -51,9 +48,27 @@ namespace AG.Data.Services
                 var tweets = _tweetBuilder.Build(internalTweetFile);
 
                 //5. Iterate through list of users
-                IterateThroughUsers(users, tweets);
+                foreach (var user in users)
+                {
+                    //6.  >>  Get tweet(s) per user 
+                    var tweetsToBePrinted = tweets.Where(y => y.User.Equals(user.Name)).ToList();
+                    if (tweetsToBePrinted.Count == 0)
+                        continue;
 
-                DisplayGeneralOutput.PrintMessageFooter();
+                    //7.  >>  Print user
+                    Thread.Sleep(2000);
+                    Console.WriteLine("{0,5}", user.Name);
+                    foreach (var t in tweetsToBePrinted)
+                    {
+                        Thread.Sleep(1000);
+                        //8.  >>  Validate tweet size
+                        //9.  >>  Print first 140 characters of tweet.
+                        Console.WriteLine("{0,10} : {1,10}", "@" + t.User, t.Message);
+                    }
+                    Console.WriteLine("");
+                }
+
+                PrintMessageFooter();
 
                 return await Task.FromResult(true);
             }
@@ -65,28 +80,12 @@ namespace AG.Data.Services
             }
         }
 
-        private static void IterateThroughUsers(IList<Entities.User> users, IList<Entities.Tweet> tweets)
+        private static void PrintMessageFooter()
         {
-            foreach (var user in users)
-            {
-                //6.  >>  Get tweet(s) per user 
-                var tweetsToBePrinted = tweets.Where(y => y.User.Equals(user.Name)).ToList();
-                if (tweetsToBePrinted.Count == 0)
-                    continue;
-
-                //7.  >>  Print user
-                Thread.Sleep(2000);
-                Console.WriteLine("{0,5}", user.Name);
-                foreach (var t in tweetsToBePrinted)
-                {
-                    Thread.Sleep(1000);
-                    //8.  >>  Validate tweet size
-                    //9.  >>  Print first 140 characters of tweet.
-                    Console.WriteLine("{0,10} : {1,10}", "@" + t.User, t.Message);
-                }
-                Console.WriteLine("");
-            }
+            Console.WriteLine("Press any key to exit");
+            Console.Read();
         }
+
 
         #endregion
     }
