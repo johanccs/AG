@@ -51,15 +51,13 @@ namespace AG.Data.Services
                 //5. Iterate through list of users
                 TweetManagerHelper.IterateThroughUsers(users, tweets);
 
-                DisplayGeneralOutput.PrintMessageFooter();
-
                 return await Task.FromResult(true);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                DisplayGeneralOutput.DisplayErrorMessage(ex.Message);
 
-                return false;
+                return await Task.FromResult(false);
             }
         }
 

@@ -90,11 +90,18 @@ namespace AG.Data.Services
             return users;
         }
 
-        private IList<string>ReadLines(string filePath)
+        private IList<string> ReadLines(string filePath)
         {
-            var lines = _fileReader.Read(filePath);
+            try
+            {
+                var lines = _fileReader.Read(filePath);
 
-            return lines;
+                return lines;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         #endregion

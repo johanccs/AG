@@ -18,5 +18,13 @@ namespace AG.Common.Helpers
             Console.WriteLine("Press any key to exit");
             Console.Read();
         }
+
+        public static void DisplayErrorMessage(string message)
+        {
+            Console.WriteLine($"An unexpected error occured: {message}");
+            Console.WriteLine("AG Tweet will now exit");
+            Console.WriteLine("");
+            Console.Read();
+        }
     }
 }

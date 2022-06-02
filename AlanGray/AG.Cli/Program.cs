@@ -1,12 +1,14 @@
-﻿using AG.Data.Contracts;
+﻿using AG.Common.Helpers;
+using AG.Data.Contracts;
 using AG.IoC;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace AG.Cli
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             IServiceCollection services = new ServiceCollection();
 
@@ -16,7 +18,10 @@ namespace AG.Cli
 
             var tweetManager = serviceProvider.GetService<ITweetManager>();
 
-            tweetManager.Run();
+            if(await tweetManager.Run())
+            {
+                DisplayGeneralOutput.PrintMessageFooter();
+            }
         }
     }
 }
