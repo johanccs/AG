@@ -7,7 +7,7 @@ namespace AG.Common.Helpers
     {
         public static void DisplayHeader(string param)
         {
-            Thread.Sleep(2000);
+            Thread.Sleep(500);
             Console.WriteLine("{0,5}", param);
         }
 

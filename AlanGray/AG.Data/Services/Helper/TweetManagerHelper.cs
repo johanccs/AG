@@ -23,7 +23,6 @@ namespace AG.Data.Services.Helper
 
                 foreach (var t in tweetsToBePrinted)
                 {
-                    Thread.Sleep(1000);
                     //8.  >>  Validate tweet size
                     //9.  >>  Print first 140 characters of tweet.
                     DisplayTweetDetail.DisplayDetail(t.User, TweetValidator.Validate(t.Message));

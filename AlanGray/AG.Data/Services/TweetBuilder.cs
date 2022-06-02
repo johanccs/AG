@@ -12,7 +12,7 @@ namespace AG.Data.Services
         #region Readonly Fields
 
         private readonly IFileReader _fileReader;
-
+      
         #endregion
 
         #region Constants

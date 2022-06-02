@@ -5,49 +5,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AG.Data.Services
+namespace AG.Data.Services.Mocks
 {
-    public class UserBuilder : IUserBuilder
+    public class MockUserBuilder : IMockUserBuilder
     {
-        #region Readonly Fields
-
-        private readonly IFileReader _fileReader;
-       
-        #endregion
-
         #region Constants
 
         private const string FOLLOWS = "follows";
 
         #endregion
 
-        #region Ctor
-
-        public UserBuilder(IFileReader fileReader)
-        {
-            _fileReader = fileReader;
-        }
-
-        #endregion
-
         #region Methods
 
-        public IList<User> Build(string filePath)
-        {
-            var lines = ReadLines(filePath);
-
-            return BuildUsers(lines);
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private IList<User>BuildUsers(IList<string> lines)
+        public IList<User> BuildUsers(IList<string> lines)
         {
             var users = new List<User>();
 
-            foreach(var line in lines)
+            foreach (var line in lines)
             {
                 var retUsers = BuildUsersFromLine(line, FOLLOWS);
 
@@ -59,13 +33,13 @@ namespace AG.Data.Services
 
             var distinctList = users.GroupBy(x => x.Name)
                 .Select(x => x.First())
-                .OrderBy(x=>x.Name)
+                .OrderBy(x => x.Name)
                 .ToList();
 
             return distinctList;
         }
 
-        private IList<User>BuildUsersFromLine(string userLine, string criteria)
+        public IList<User> BuildUsersFromLine(string userLine, string criteria)
         {
             if (!StringHelper.Contains(userLine, criteria))
                 throw new ArgumentException("Invalid user");
@@ -73,11 +47,11 @@ namespace AG.Data.Services
             var users = new List<User>();
             var results = userLine.Split(criteria);
 
-            if(results.Length > 0)
+            if (results.Length > 0)
             {
-                foreach(var result in results)
+                foreach (var result in results)
                 {
-                    if(result.Contains(","))
+                    if (result.Contains(","))
                     {
                         var userResults = BuildUsersFromLine(result, ",");
                         users.AddRange(userResults);
@@ -88,13 +62,6 @@ namespace AG.Data.Services
             }
 
             return users;
-        }
-
-        private IList<string>ReadLines(string filePath)
-        {
-            var lines = _fileReader.Read(filePath);
-
-            return lines;
         }
 
         #endregion

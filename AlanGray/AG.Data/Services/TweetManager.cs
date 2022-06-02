@@ -1,12 +1,9 @@
 ﻿using AG.Common.Enums;
 using AG.Common.Helpers;
 using AG.Data.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using AG.Data.Services.Helper;
+using System;
+using System.Threading.Tasks;
 
 namespace AG.Data.Services
 {
